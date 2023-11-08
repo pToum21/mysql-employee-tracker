@@ -1,5 +1,14 @@
 const inquirer = require('inquirer')
+const db = require('./config/connection')
+require('console.table')
 const fs = require('fs')
+
+
+const utils = require('utils')
+db.query = utils.promisify(db.query)
+
+
+
 
 
 const prompt = () => {
@@ -15,14 +24,14 @@ const prompt = () => {
             ]
         )
         .then((answers) => {
-            switch(answers.tableChoice) {
+            switch (answers.tableChoice) {
                 case 'view all departments':
                     return //add function for view all departments
 
             }
         })
 
-        
+
 }
 
 
