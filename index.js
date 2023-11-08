@@ -40,7 +40,7 @@ function startApp() {
 
 
                 case "Quit":
-                    db.close();
+                db.close();
 
             }
         })
