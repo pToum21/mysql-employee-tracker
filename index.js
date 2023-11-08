@@ -40,7 +40,7 @@ function startApp() {
                     addRole()
                     break;
 
-                
+
 
 
 
@@ -61,32 +61,32 @@ function startApp() {
 
 async function addRole() {
     const departments = await db.query(
-      "select id as value, name as name from department"
+        "select id as value, name as name from department"
     );
     const { role_title, role_salary, dept_id } = await prompt([
-      {
-        type: "input",
-        name: "role_title",
-        message: "Enter the title of the new role.",
-      },
-      {
-        type: "input",
-        name: "role_salary",
-        message: "Enter the salary of the new role.",
-      },
-      {
-        type: "list",
-        name: "dept_id",
-        message: "Which department does this role belong to?",
-        choices: departments,
-      },
+        {
+            type: "input",
+            name: "role_title",
+            message: "Enter the title of the new role.",
+        },
+        {
+            type: "input",
+            name: "role_salary",
+            message: "Enter the salary of the new role.",
+        },
+        {
+            type: "list",
+            name: "dept_id",
+            message: "Which department does this role belong to?",
+            choices: departments,
+        },
     ]);
     await db.query(
-      "insert into role (title, salary, department_id) values (?,?,?) ",
-      [role_title, role_salary, dept_id]
+        "insert into role (title, salary, department_id) values (?,?,?) ",
+        [role_title, role_salary, dept_id]
     );
     console.log("The new role was successfully added.");
-  }
+}
 
 
 async function addEmployee() {
@@ -109,16 +109,17 @@ async function addEmployee() {
 
 
 async function addDepartment() {
-    const name  = await prompt([
+    const department_name = await prompt([
         {
             type: "input",
-            name: "name",
+            name: "department_name",
             message: "What is the name of the department you are trying to add?"
         }
     ])
+    console.log(department_name)
     await db.query(
-        "insert into department (name) values (?)",
-        [name]
+        "insert into department (department_name) values (?)",
+        [department_name.department_name]
     );
     console.log("The new Department was successfully added!")
     startApp();
