@@ -32,11 +32,15 @@ function startApp() {
                 //     //add function for view all departments;
                 //     break;
 
+                case 'add a department':
+                    addDepartment()
+                    break;
+
                 case 'add a role':
                     addRole()
                     break;
 
-
+                
 
 
 
@@ -57,69 +61,67 @@ function startApp() {
 
 async function addRole() {
     const departments = await db.query(
-        "SELECT id AS VALUE, name AS name FROM department"
+      "select id as value, name as name from department"
     );
     const { role_title, role_salary, dept_id } = await prompt([
-        {
-            type: "input",
-            name: "role_title",
-            message: "Enter the title of the new role.",
-        },
-        {
-            type: "input",
-            name: "role_salary",
-            message: "Enter the salary of the new role.",
-        },
-        {
-            type: "list",
-            name: "dept_id",
-            message: "Which department does this role belong to?",
-            choices: departments,
-        },
+      {
+        type: "input",
+        name: "role_title",
+        message: "Enter the title of the new role.",
+      },
+      {
+        type: "input",
+        name: "role_salary",
+        message: "Enter the salary of the new role.",
+      },
+      {
+        type: "list",
+        name: "dept_id",
+        message: "Which department does this role belong to?",
+        choices: departments,
+      },
     ]);
-    console.log(dept_id);
     await db.query(
-        "INSERT INTO role (title, salary, department_id) VALUES (?,?,?) ",
-        [role_title, role_salary, dept_id]
+      "insert into role (title, salary, department_id) values (?,?,?) ",
+      [role_title, role_salary, dept_id]
     );
-    console.log("The new role was successfully added!");
-    startApp();
+    console.log("The new role was successfully added.");
+  }
+
+
+async function addEmployee() {
+    let managers = await db.query(
+        "SELECT id AS VALUE, CONCAT(first_name, ' ', last_name) AS name FROM employee"
+    );
+    const { first_name, last_name, } = await prompt([
+        {
+            type: "input",
+            name: "first_name",
+            message: "Please Enter Your First Name"
+        },
+        {
+            type: "input",
+            name: "last_name",
+            message: "Please Enter Your Last Name"
+        }
+    ])
 }
 
 
-// async function addEmployee() {
-//     let managers = await db.query(
-//         "SELECT id AS VALUE, CONCAT(first_name, ' ', last_name) AS name FROM employee"
-//     );
-//     const { first_name, last_name, } = await prompt([
-//         {
-//             type: "input",
-//             name: "first_name",
-//             message: "Please Enter Your First Name"
-//         },
-//         {
-//             type: "input",
-//             name: "last_name",
-//             message: "Please Enter Your Last Name"
-//         }
-//     ])
-// }
-
-
 async function addDepartment() {
-    const { department_title } = await prompt([
+    const name  = await prompt([
         {
             type: "input",
-            name: "department_title",
+            name: "name",
             message: "What is the name of the department you are trying to add?"
         }
     ])
     await db.query(
-        "INSERT INTO department (name) VALUES ? ",
-        [department_title]
+        "insert into department (name) values (?)",
+        [name]
     );
     console.log("The new Department was successfully added!")
-    s
+    startApp();
 }
 
 startApp();
