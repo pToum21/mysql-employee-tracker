@@ -40,6 +40,10 @@ function startApp() {
                     addRole()
                     break;
 
+                case 'add an employee':
+                    addEmployee()
+                    break;
+
 
 
 
@@ -86,25 +90,49 @@ async function addRole() {
         [role_title, role_salary, dept_id]
     );
     console.log("The new role was successfully added.");
+    startApp();
 }
 
 
 async function addEmployee() {
     let managers = await db.query(
-        "SELECT id AS VALUE, CONCAT(first_name, ' ', last_name) AS name FROM employee"
+        "select id as value, concat(first_name, ' ', last_name) as name from employee"
     );
-    const { first_name, last_name, } = await prompt([
+    let roleList = await db.query(
+        "select id as value, title as name from role "
+    );
+    managers = [{ value: null, name: "No Manager" }, ...managers];
+
+    let answers = await prompt([
         {
             type: "input",
-            name: "first_name",
+            name: "firstName",
             message: "Please Enter Your First Name"
         },
         {
             type: "input",
-            name: "last_name",
+            name: "lastName",
             message: "Please Enter Your Last Name"
+        },
+        {
+            type: "list",
+            name: "role",
+            message: "What role does the employee have?",
+            choices: roleList
+        },
+        {
+            type: "list",
+            name: "manager",
+            message: "Who is the employees manager?",
+            choices: managers
         }
+
     ])
+    await db.query(
+        "insert into employee (first_name, last_name, role_id, manager_id) values (?, ?, ?, ?)", [answers.firstName, answers.lastName, answers.role, answers.manager]
+    )
+    console.log("The Employee has been succesfully added!")
+    startApp();
 }
 
 
