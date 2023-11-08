@@ -44,6 +44,10 @@ function startApp() {
                     addEmployee()
                     break;
 
+                case 'update an employee role':
+                    updateEmployee();
+                    break;
+
 
 
 
@@ -96,7 +100,7 @@ async function addRole() {
 
 async function addEmployee() {
     let managers = await db.query(
-        "select id as value, concat(first_name, ' ', last_name) as name from employee"
+        "select id as value, concat(first_name, ' ', last_name) as name from employee where manager_id is null"
     );
     let roleList = await db.query(
         "select id as value, title as name from role "
@@ -144,12 +148,41 @@ async function addDepartment() {
             message: "What is the name of the department you are trying to add?"
         }
     ])
-    console.log(department_name)
     await db.query(
         "insert into department (department_name) values (?)",
         [department_name.department_name]
     );
     console.log("The new Department was successfully added!")
+    startApp();
+}
+
+async function updateEmployee(){
+    let employees = await db.query(
+        "select id as value, concat(first_name, ' ', last_name) as name from employee"
+    );
+    let roleList = await db.query(
+        "select id as value, title as name from role "
+    );
+
+    let answers = await prompt([
+        {
+            type: "list",
+            name: "employeeChoice",
+            message: "Choose the employee you would like to update: ",
+            choices: employees
+        },
+        {
+            type: "list",
+            name: "role",
+            message: "What is the employees new role? ",
+            choices: roleList
+        }
+    ])
+    
+    await db.query(
+        "update employee set role_id = ? where id = ?", [answers.role, answers.employeeChoice]
+    )
+    console.log("The Employee has been updated!")
     startApp();
 }
 
