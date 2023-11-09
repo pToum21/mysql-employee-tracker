@@ -32,7 +32,14 @@ function startApp() {
                     viewAllDepartments()
                     break;
 
-                
+                case 'view all roles':
+                    viewAllRoles()
+                    break;
+
+                case 'view all employees':
+                    viewAllEmployees()
+                    break;
+
                 case 'add a department':
                     addDepartment()
                     break;
@@ -49,33 +56,42 @@ function startApp() {
                     updateEmployee();
                     break;
 
-
-
-
-
-
-
-
-
-
-                // case "Quit":
-                //     db.close();
+                case "Quit":
+                    db.close();
 
             }
         })
-
-
 }
 
 
-async function viewAllDepartments(){
-   try{
-    const result = await db.query("select * from department");
-    console.table(result)
-   }catch (error){
-    console.log(error)
-   }
-   startApp();
+async function viewAllDepartments() {
+    try {
+        const result = await db.query("select * from department");
+        console.table(result)
+    } catch (error) {
+        console.log(error)
+    }
+    startApp();
+}
+
+async function viewAllRoles() {
+    try {
+        const result = await db.query("select * from role");
+        console.table(result)
+    } catch (error) {
+        console.log(error)
+    }
+    startApp();
+}
+
+async function viewAllEmployees() {
+    try {
+        const result = await db.query("select * from employee");
+        console.table(result)
+    } catch (error) {
+        console.log(error)
+    }
+    startApp();
 }
 
 
@@ -168,7 +184,7 @@ async function addDepartment() {
     startApp();
 }
 
-async function updateEmployee(){
+async function updateEmployee() {
     let employees = await db.query(
         "select id as value, concat(first_name, ' ', last_name) as name from employee"
     );
@@ -190,7 +206,7 @@ async function updateEmployee(){
             choices: roleList
         }
     ])
-    
+
     await db.query(
         "update employee set role_id = ? where id = ?", [answers.role, answers.employeeChoice]
     )
