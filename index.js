@@ -56,7 +56,7 @@ function startApp() {
                     updateEmployee();
                     break;
 
-                case "Quit":
+                case 'QUIT':
                     db.close();
 
             }
