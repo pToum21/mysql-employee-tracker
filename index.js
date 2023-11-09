@@ -425,6 +425,7 @@ async function deleteEmployee() {
     startApp();
 }
 
+// this function allows the user to view the total budget of a department
 async function viewBudget() {
     try {
         const result = await db.query(
