@@ -25,6 +25,7 @@ function startApp() {
                     'view employees by manager',
                     'view employees by department',
                     'delete a department',
+                    'delete a role',
                     'QUIT'
                 ]
             }
@@ -74,6 +75,10 @@ function startApp() {
 
                 case 'delete a department':
                     deleteDepartment()
+                    break;
+
+                case 'delete a role':
+                    deleteRole()
                     break;
 
                 case 'QUIT':
@@ -355,6 +360,28 @@ async function deleteDepartment() {
     console.log('The Department has been deleted');
     startApp();
 }
+
+async function deleteRole(){
+    const data = await db.query(
+        "SELECT id as value, title as name FROM role"
+    );
+
+    const results = await prompt([
+        {
+            type: "list",
+            name: "roleName",
+            message: "Choose the role you want to delete",
+            choices: data,
+        },
+    ]);
+
+    await db.query("DELETE FROM role WHERE id = ?", [results.roleName]);
+
+    console.log('The Role has been deleted');
+    startApp();
+}
+
+
 
 startApp();
 
