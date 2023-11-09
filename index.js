@@ -1,13 +1,18 @@
+// requires
 const inquirer = require('inquirer')
 const db = require('./db/connection')
 require("console.table");
 const { prompt } = require("inquirer");
 
+// requiring util allows us to use async await to munipulate the db
 const utils = require('util')
 db.query = utils.promisify(db.query)
 
+// starts the app and runs the first prompt asking the user what they want to do with the database
 function startApp() {
     inquirer
+
+        // all possible choices for the user
         .prompt([
             {
                 type: 'list',
@@ -31,6 +36,8 @@ function startApp() {
                 ]
             }
         ])
+
+        // switch statement that runs the function based on the users selection in the prompt above
         .then((answers) => {
             switch (answers.tableChoice) {
 
@@ -83,8 +90,8 @@ function startApp() {
                     break;
 
                 case 'delete an Employee':
-                        deleteEmployee()
-                        break;
+                    deleteEmployee()
+                    break;
 
                 case 'QUIT':
                     db.close();
@@ -93,7 +100,7 @@ function startApp() {
         })
 }
 
-
+// function that provides a table of all avaliable departments inside the database
 async function viewAllDepartments() {
     try {
         const result = await db.query("select * from department");
@@ -104,7 +111,7 @@ async function viewAllDepartments() {
     startApp();
 }
 
-
+// function that provides a table of all avaliable roles inside the database
 async function viewAllRoles() {
     try {
         const result = await db.query("select role.id, role.title, role.salary, department.department_name from role left join department on department.id = role.department_id");
@@ -115,6 +122,7 @@ async function viewAllRoles() {
     startApp();
 }
 
+// function that provides a table of all avaliable employees inside the database
 async function viewAllEmployees() {
     try {
         const result = await db.query(`SELECT employee.id, employee.first_name AS "first name", employee.last_name 
@@ -134,7 +142,7 @@ async function viewAllEmployees() {
     startApp();
 }
 
-
+// this function allows you to add a new role to the role table
 async function addRole() {
     const departments = await db.query(
         "select id as value, name as name from department"
@@ -165,7 +173,7 @@ async function addRole() {
     startApp();
 }
 
-
+// this function allows the user to add a new employee to the employee table
 async function addEmployee() {
     let managers = await db.query(
         "select id as value, concat(first_name, ' ', last_name) as name from employee where manager_id is null"
@@ -207,7 +215,7 @@ async function addEmployee() {
     startApp();
 }
 
-
+// this function allows the user to add a department to the department table
 async function addDepartment() {
     const department_name = await prompt([
         {
@@ -254,6 +262,7 @@ async function updateEmployee() {
     startApp();
 }
 
+// this function allows the user to update an employees manager
 async function updateEmployeemanager() {
     let employees = await db.query(
         "select id as value, concat(first_name, ' ', last_name) as name from employee where manager_id is not null"
@@ -286,6 +295,7 @@ async function updateEmployeemanager() {
 
 }
 
+// this function allows the user to view employees based off their manager
 async function viewEmployeesByManager() {
     try {
         const results = await db.query(`
@@ -313,7 +323,7 @@ async function viewEmployeesByManager() {
     }
 }
 
-
+// this function allows the user to view employees based off their department
 async function viewEmployeesByDepartment() {
     try {
         const results = await db.query(
@@ -346,6 +356,7 @@ async function viewEmployeesByDepartment() {
     }
 }
 
+// this function allows the user to delete departments from the department table
 async function deleteDepartment() {
     const data = await db.query(
         "SELECT id as value, department_name as name FROM department"
@@ -366,7 +377,8 @@ async function deleteDepartment() {
     startApp();
 }
 
-async function deleteRole(){
+// this function allows the user to delete roles from the role table
+async function deleteRole() {
     const data = await db.query(
         "SELECT id as value, title as name FROM role"
     );
@@ -386,8 +398,8 @@ async function deleteRole(){
     startApp();
 }
 
-
-async function deleteEmployee(){
+// this function allows the user to delete employees from the employee table
+async function deleteEmployee() {
     const data = await db.query(
         // "SELECT id as value, title as name FROM role"
         "select id as value, concat(first_name, ' ', last_name) as name from employee"
@@ -409,6 +421,6 @@ async function deleteEmployee(){
 }
 
 
-
+// calls start app
 startApp();
 
