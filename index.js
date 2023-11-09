@@ -22,6 +22,7 @@ function startApp() {
                     'add an employee',
                     'update an employee role',
                     'update employee manager',
+                    'view employees by manager',
                     'QUIT'
                 ]
             }
@@ -59,6 +60,10 @@ function startApp() {
 
                 case 'update employee manager':
                     updateEmployeemanager()
+                    break;
+
+                case 'view employees by manager':
+                    viewEmployeesByManager()
                     break;
 
                 case 'QUIT':
@@ -260,6 +265,35 @@ async function updateEmployeemanager() {
     startApp();
 
 }
+
+async function viewEmployeesByManager() {
+    // const managers = await db.query("select id as value, concat(first_name, ' ', last_name) as name from employee where manager_id is null")
+    try {
+        const results = await db.query(`
+        SELECT
+            m.id AS manager_id,
+            CONCAT(m.first_name, ' ', m.last_name) AS manager_name,
+            e.id AS employee_id,
+            CONCAT(e.first_name, ' ', e.last_name) AS employee_name
+        FROM
+            employee AS m
+        LEFT JOIN
+            employee AS e
+        ON
+            m.id = e.manager_id
+        WHERE
+            e.manager_id IS NOT NULL
+        ORDER BY
+            manager_id, employee_id;
+    `);
+
+        console.table(results);
+        startApp();
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
 
 startApp();
 
