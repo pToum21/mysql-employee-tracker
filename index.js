@@ -24,6 +24,7 @@ function startApp() {
                     'update employee manager',
                     'view employees by manager',
                     'view employees by department',
+                    'delete a department',
                     'QUIT'
                 ]
             }
@@ -69,6 +70,10 @@ function startApp() {
 
                 case 'view employees by department':
                     viewEmployeesByDepartment()
+                    break;
+
+                case 'delete a department':
+                    deleteDepartment()
                     break;
 
                 case 'QUIT':
@@ -331,7 +336,25 @@ async function viewEmployeesByDepartment() {
     }
 }
 
+async function deleteDepartment() {
+    const data = await db.query(
+        "SELECT id as value, department_name as name FROM department"
+    );
 
+    const results = await prompt([
+        {
+            type: "list",
+            name: "departmentName",
+            message: "Choose the department you want to delete",
+            choices: data,
+        },
+    ]);
+
+    await db.query("DELETE FROM department WHERE id = ?", [results.departmentName]);
+
+    console.log('The Department has been deleted');
+    startApp();
+}
 
 startApp();
 
