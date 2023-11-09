@@ -21,6 +21,7 @@ function startApp() {
                     'add a role',
                     'add an employee',
                     'update an employee role',
+                    'update employee manager',
                     'QUIT'
                 ]
             }
@@ -56,6 +57,10 @@ function startApp() {
                     updateEmployee();
                     break;
 
+                case 'update employee manager':
+                    updateEmployeemanager()
+                    break;
+
                 case 'QUIT':
                     db.close();
 
@@ -73,6 +78,7 @@ async function viewAllDepartments() {
     }
     startApp();
 }
+
 
 async function viewAllRoles() {
     try {
@@ -221,6 +227,38 @@ async function updateEmployee() {
     )
     console.log("The Employee has been updated!")
     startApp();
+}
+
+async function updateEmployeemanager() {
+    let employees = await db.query(
+        "select id as value, concat(first_name, ' ', last_name) as name from employee where manager_id is not null"
+    );
+    let managers = await db.query(
+        "select id as value, concat(first_name, ' ', last_name) as name from employee where manager_id is null"
+    );
+
+    const employee = await prompt([
+        {
+            type: "list",
+            name: "employeeChoice",
+            message: "Choose the employee you would like to update: ",
+            choices: employees
+        },
+        {
+
+            type: "list",
+            name: "managerName",
+            message: "Choose the new manager for the selected employee: ",
+            choices: managers
+
+        }
+    ])
+    await db.query(
+        "update employee set manager_id = ? where id = ?", [employee.managerName, employee.employeeChoice]
+    )
+    console.log("The employees manager has been updated!")
+    startApp();
+
 }
 
 startApp();
