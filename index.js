@@ -32,6 +32,7 @@ function startApp() {
                     'delete a department',
                     'delete a role',
                     'delete an Employee',
+                    'view the total utilized budget of a department',
                     'QUIT'
                 ]
             }
@@ -91,6 +92,10 @@ function startApp() {
 
                 case 'delete an Employee':
                     deleteEmployee()
+                    break;
+
+                case 'view the total utilized budget of a department':
+                    viewBudget()
                     break;
 
                 case 'QUIT':
@@ -420,6 +425,34 @@ async function deleteEmployee() {
     startApp();
 }
 
+async function viewBudget() {
+    try {
+        const result = await db.query(
+            `
+            SELECT
+                d.department_name AS department,
+                SUM(r.salary) AS total_budget
+            FROM
+                department AS d
+            INNER JOIN
+                role AS r
+            ON
+                d.id = r.department_id
+            INNER JOIN
+                employee AS e
+            ON
+                r.id = e.role_id
+            GROUP BY
+                d.department_name;
+        `
+        )
+        console.table(result);
+        startApp();
+    } catch {
+        console.error('Error fetching data:', error);
+    }
+
+}
 
 // calls start app
 startApp();
