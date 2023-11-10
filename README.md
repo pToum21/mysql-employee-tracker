@@ -29,9 +29,11 @@ you must install node, console.table, mysql2, and utils using init -y and npm i 
 ## Test - 🧪
 You must run npm run start in the terminal to test the employee tracker.
 
-## Preview Photo
-![index js - mysql-employee-tracker - Visual Studio Code 11_9_2023 6_09_20 PM](https://github.com/pToum21/mysql-employee-tracker/assets/138056441/d4b66d83-dc20-4284-aeca-95392fb3e98a)
+## Preview Video
 
+
+## Preview Photo
+![employee datamanger image](https://github.com/pToum21/mysql-employee-tracker/assets/138056441/d4b66d83-dc20-4284-aeca-95392fb3e98a)
 
 ## Qustions - ❓
 Feel Free to contact me at pey3moo3@gmail.com or [ptoum21](https://github.com/ptoum21).
