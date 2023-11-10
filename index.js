@@ -4,10 +4,18 @@ const db = require('./db/connection')
 require("console.table");
 const { prompt } = require("inquirer");
 
+const logo = require('asciiart-logo')
 // requiring util allows us to use async await to munipulate the db
 const utils = require('util')
 db.query = utils.promisify(db.query)
 
+
+function init() {
+    const logoText = logo({name: "Employee Database Manager" }).render();
+    console.log(logoText)
+    startApp()
+
+}
 // starts the app and runs the first prompt asking the user what they want to do with the database
 function startApp() {
     inquirer
@@ -457,4 +465,5 @@ async function viewBudget() {
 
 // calls start app
 startApp();
+init();
 

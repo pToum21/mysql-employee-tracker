@@ -8,6 +8,7 @@
 * used async await 
 * used db queries to all ow to user to munipulate the selected table of their desire
 * This project allows a user to answer prompts on weather they want to view a specific table or edit a specific table
+* This project also uses asciiart logo for the dessign in the terminal
 
 ## Table of Contents - 📋
 * [Installation](#installation---☢️)
