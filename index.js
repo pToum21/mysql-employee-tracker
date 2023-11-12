@@ -13,11 +13,12 @@ db.query = utils.promisify(db.query)
 function init() {
     const logoText = logo({name: "Employee Database Manager" }).render();
     console.log(logoText)
-    startApp()
+    // startApp()
 
 }
 // starts the app and runs the first prompt asking the user what they want to do with the database
 function startApp() {
+    init();
     inquirer
 
         // all possible choices for the user
@@ -158,7 +159,7 @@ async function viewAllEmployees() {
 // this function allows you to add a new role to the role table
 async function addRole() {
     const departments = await db.query(
-        "select id as value, name as name from department"
+        "select id as value, department_name as name from department"
     );
     const { role_title, role_salary, dept_id } = await prompt([
         {
@@ -226,6 +227,7 @@ async function addEmployee() {
     )
     console.log("The Employee has been succesfully added!")
     startApp();
+    
 }
 
 // this function allows the user to add a department to the department table
@@ -465,5 +467,5 @@ async function viewBudget() {
 
 // calls start app
 startApp();
-init();
+
 
