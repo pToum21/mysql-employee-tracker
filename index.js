@@ -16,7 +16,7 @@ function init() {
 }
 // starts the app and runs the first prompt asking the user what they want to do with the database
 function startApp() {
-    init();
+    
     inquirer
 
         // all possible choices for the user
@@ -464,6 +464,7 @@ async function viewBudget() {
 }
 
 // calls start app
+init();
 startApp();
 
 
