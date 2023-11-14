@@ -11,10 +11,8 @@ db.query = utils.promisify(db.query)
 
 
 function init() {
-    const logoText = logo({name: "Employee Database Manager" }).render();
+    const logoText = logo({ name: "Employee Database Manager" }).render();
     console.log(logoText)
-    // startApp()
-
 }
 // starts the app and runs the first prompt asking the user what they want to do with the database
 function startApp() {
@@ -50,7 +48,7 @@ function startApp() {
         // switch statement that runs the function based on the users selection in the prompt above
         .then((answers) => {
             switch (answers.tableChoice) {
-
+                // each case will run then break if they match the answer to the prompt
                 case 'view all departments':
                     viewAllDepartments()
                     break;
@@ -227,7 +225,7 @@ async function addEmployee() {
     )
     console.log("The Employee has been succesfully added!")
     startApp();
-    
+
 }
 
 // this function allows the user to add a department to the department table
